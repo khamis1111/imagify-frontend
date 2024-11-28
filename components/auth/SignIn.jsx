@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useSignIn } from "@clerk/nextjs";
 import { Lock, Mail } from "lucide-react";
 import { Button } from "../ui/button";
@@ -20,7 +20,7 @@ export default function SignInPage({ setStatus }) {
     password: "",
   });
 
-  const onSignInPress = useCallback(async () => {
+  const onSignInPress = async () => {
     if (!isLoaded) {
       return;
     }
@@ -76,7 +76,7 @@ export default function SignInPage({ setStatus }) {
           error.response?.data.msg || "Something is wrong, try again!",
       });
     }
-  }, [isLoaded, form.email, form.password]);
+  };
 
   return (
     <div className="space-y-2">

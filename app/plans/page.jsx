@@ -16,37 +16,40 @@ const Page = () => {
 
   const handlePayment = (planId) => {
     setLoading(true);
-    user
-      ? axios
-          .post(
-            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/user/stripe-session",
-            {
-              planId,
+    if (user) {
+      axios
+        .post(
+          process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/user/stripe-session",
+          {
+            planId,
+          },
+          {
+            headers: {
+              token,
             },
-            {
-              headers: {
-                token,
-              },
-            }
-          )
-          .then((res) => {
-            setLoading(false);
-            if (res.data) window.location.href = res.data?.session;
-          })
-          .catch((err) => {
-            setLoading(false);
-            toast({
-              description:
-                err.response?.data.msg || "Something is wrong, try again!",
-            });
-          })
-      : setOpenLogin(true);
+          }
+        )
+        .then((res) => {
+          setLoading(false);
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          window.location.href = res.data?.session;
+        })
+        .catch((err) => {
+          setLoading(false);
+          toast({
+            description:
+              err.response?.data.msg || "Something is wrong, try again!",
+          });
+        });
+    } else {
+      setOpenLogin(true);
+    }
   };
 
   const queryParams = new URLSearchParams(location.search);
   const session_id = queryParams.get("session_id");
 
-  const verifyPayment = () => {
+  const verifyPayment = (session_id, token, loadCredit, toast) => {
     setLoading(true);
     axios
       .post(
@@ -58,8 +61,8 @@ const Page = () => {
           },
         }
       )
-      .then(async (res) => {
-        await loadCredit();
+      .then(() => {
+        loadCredit();
         setLoading(false);
         toast({
           description: "Paid Successfully, Enjoy :)",
@@ -67,14 +70,17 @@ const Page = () => {
       })
       .catch((err) => {
         setLoading(false);
+        toast({
+          description: err.response?.data.msg || "Payment failed, try again!",
+        });
       });
   };
 
   useEffect(() => {
     if (session_id && token) {
-      verifyPayment();
+      verifyPayment(session_id, token, loadCredit, toast);
     }
-  }, [session_id, token]);
+  }, [session_id, token, loadCredit, toast]);
 
   return (
     <>

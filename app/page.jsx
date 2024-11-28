@@ -16,7 +16,11 @@ export default function Home() {
   const { user, setOpenLogin } = useContext(AppContext);
 
   const isLoggedResult = () => {
-    !user ? setOpenLogin(true) : router.push("/result");
+    if (!user) {
+      setOpenLogin(true);
+    } else {
+      router.push("/result");
+    }
   };
 
   return (
