@@ -9,7 +9,7 @@ import axios from "axios";
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
   const { user, token, loadCredit, setOpenLogin } = useContext(AppContext);
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -141,4 +141,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

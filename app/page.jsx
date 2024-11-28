@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
-  const { user, openLogin, setOpenLogin } = useContext(AppContext);
+  const { user, setOpenLogin } = useContext(AppContext);
 
   const isLoggedResult = () => {
     !user ? setOpenLogin(true) : router.push("/result");

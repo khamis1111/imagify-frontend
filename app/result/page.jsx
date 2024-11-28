@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const { user, imageGenerate } = useContext(AppContext);
 
@@ -103,4 +103,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
