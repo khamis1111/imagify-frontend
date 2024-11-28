@@ -15,7 +15,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Lock, Mail, Text, UserRound } from "lucide-react";
+import { Text } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -23,13 +23,8 @@ import { useContext, useState } from "react";
 import { AppContext } from "@/context/AppContext";
 import SignUpPage from "@/components/auth/SignUp";
 import SignInPage from "@/components/auth/SignIn";
-import axios from "axios";
 import {
-  useAuth,
-  UserButton,
-  UserProfile,
-  useSignIn,
-  useUser,
+  useAuth, useUser
 } from "@clerk/nextjs";
 import { Skeleton } from "../ui/skeleton";
 
