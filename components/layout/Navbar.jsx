@@ -23,9 +23,7 @@ import { useContext, useState } from "react";
 import { AppContext } from "@/context/AppContext";
 import SignUpPage from "@/components/auth/SignUp";
 import SignInPage from "@/components/auth/SignIn";
-import {
-  useAuth, useUser
-} from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { Skeleton } from "../ui/skeleton";
 import Cookies from "js-cookie";
 
@@ -62,7 +60,11 @@ const LoginButton = ({ setOpenLogin, openLogin }) => {
   );
 };
 
-const MobileNavbar = ({ user }) => {
+const MobileNavbar = () => {
+  const { signOut } = useAuth();
+  const { setUser, user } = useContext(AppContext);
+  const userAuth = useUser();
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -103,7 +105,9 @@ const MobileNavbar = ({ user }) => {
                   />
                 </div>
                 <div className="-space-y-1">
-                  <p className="font-medium text-base">Hi! Khamis</p>
+                  <p className="font-medium text-base">
+                    Hi! {userAuth.user?.username || user.name}
+                  </p>
                   <p className="font-normal text-sm text-textGray">
                     Basic User
                   </p>
@@ -122,8 +126,24 @@ const MobileNavbar = ({ user }) => {
                     className="object-contain"
                   />
                 </div>
-                <p className="font-normal text-base">Credits left: 4</p>
+                <p className="font-normal text-base">
+                  Credits left: {user.credits}
+                </p>
               </Link>
+
+              <div
+                className={`w-full p-3 bg-red-500 text-white shadow-md rounded-full`}
+              >
+                <p
+                  onClick={() => {
+                    Cookies.remove("token");
+                    setUser(false);
+                    signOut();
+                  }}
+                >
+                  Logout
+                </p>
+              </div>
             </>
           ) : (
             <>
@@ -245,7 +265,7 @@ const Navbar = () => {
       </div>
       {/* Mobile */}
       <div className="md:hidden">
-        <MobileNavbar user={user} />
+        <MobileNavbar />
       </div>
     </div>
   );
