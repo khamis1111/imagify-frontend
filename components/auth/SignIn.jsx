@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { AppContext } from "@/context/AppContext";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import Cookies from "js-cookie";
 
 export default function SignInPage({ setStatus }) {
   const { setToken, setUser, setOpenLogin } = useContext(AppContext);
@@ -35,7 +36,7 @@ export default function SignInPage({ setStatus }) {
       );
 
       if (data) {
-        localStorage.setItem("token", data.token);
+        Cookies.set("token", data.token);
         setToken(data.token);
         setUser(data.data);
 

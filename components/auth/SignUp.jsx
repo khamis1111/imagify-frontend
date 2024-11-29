@@ -13,6 +13,7 @@ import {
 import { AppContext } from "@/context/AppContext";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import Cookies from "js-cookie";
 
 const SignUpPage = ({ setStatus }) => {
   const { setToken, setUser } = useContext(AppContext);
@@ -73,7 +74,7 @@ const SignUpPage = ({ setStatus }) => {
           );
 
           if (data) {
-            localStorage.setItem("token", data.token);
+            Cookies.set("token", data.token);
             setToken(data.token);
             setUser(data.data);
             setOpenLogin(false);

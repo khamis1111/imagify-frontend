@@ -43,44 +43,52 @@ const Page = () => {
         });
     } else {
       setOpenLogin(true);
+      toast({
+        description: "Please Login First!",
+      });
     }
   };
 
-  const queryParams = new URLSearchParams(location.search);
-  const session_id = queryParams.get("session_id");
+  let session_id = null;
 
-  const verifyPayment = (session_id, token, loadCredit, toast) => {
-    setLoading(true);
-    axios
-      .post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/user/webhook",
-        { session_id },
-        {
-          headers: {
-            token,
-          },
-        }
-      )
-      .then(() => {
-        loadCredit();
-        setLoading(false);
-        toast({
-          description: "Paid Successfully, Enjoy :)",
-        });
-      })
-      .catch((err) => {
-        setLoading(false);
-        toast({
-          description: err.response?.data.msg || "Payment failed, try again!",
-        });
-      });
-  };
+  if (typeof window !== "undefined") {
+    const queryParams = new URLSearchParams(window.location.search);
+    session_id = queryParams.get("session_id");
+  }
 
   useEffect(() => {
+    // react-hooks/exhaustive-deps
     if (session_id && token) {
-      verifyPayment(session_id, token, loadCredit, toast);
+      const verifyPayment = () => {
+        setLoading(true);
+        axios
+          .post(
+            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/user/webhook",
+            { session_id },
+            {
+              headers: {
+                token,
+              },
+            }
+          )
+          .then(() => {
+            loadCredit();
+            setLoading(false);
+            toast({
+              description: "Paid Successfully, Enjoy :)",
+            });
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.log(
+              err.response?.data.msg || "Something is wrong, try again!"
+            );
+          });
+      };
+
+      verifyPayment();
     }
-  }, [session_id, token, loadCredit, toast]);
+  }, [session_id, token]);
 
   return (
     <>

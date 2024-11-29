@@ -27,6 +27,7 @@ import {
   useAuth, useUser
 } from "@clerk/nextjs";
 import { Skeleton } from "../ui/skeleton";
+import Cookies from "js-cookie";
 
 const LoginButton = ({ setOpenLogin, openLogin }) => {
   const [status, setStatus] = useState("login");
@@ -163,7 +164,7 @@ const Navbar = () => {
       </div>
       {/* Desktop */}
       <div className="hidden md:flex items-center gap-x-5">
-        {isSignedIn || localStorage.getItem("token") ? (
+        {isSignedIn || Cookies.get("token") ? (
           isLoaded && user ? (
             <>
               {/* Credits */}
@@ -211,7 +212,7 @@ const Navbar = () => {
                   <p
                     className="hover:bg-slate-100 rounded-md p-1 cursor-pointer"
                     onClick={() => {
-                      localStorage.removeItem("token");
+                      Cookies.remove("token");
                       setUser(false);
                       signOut();
                     }}

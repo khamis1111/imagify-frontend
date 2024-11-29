@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState, createContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import Cookies from "js-cookie";
 
 export const AppContext = createContext();
 
@@ -15,7 +16,7 @@ const AppContextProvider = ({ children }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    setToken(localStorage.getItem("token"));
+    setToken(Cookies.get("token"));
   }, []);
 
   const loadCredit = async () => {
